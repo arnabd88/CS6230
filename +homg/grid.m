@@ -177,6 +177,7 @@ classdef grid < handle
     function [u, rr, iter] = solve(grid, num_vcyc, smoother, v1, v2, rhs, u, prec_switch)
       grid.set_smoother(smoother);
 	  grid.set_prec_switch(prec_switch);
+	  disp(['Prec_switch = ' num2str(grid.prec_switch)]);
       
       r = grid.residual(rhs, u);
       disp(['Initial residual is ' num2str(norm(r))]);
