@@ -121,6 +121,17 @@ classdef grid < handle
 			grid.K = K;
 		end
 		
+	% matvec for single precision
+	function mvec = matvec(grid, rhs, u)
+	   [rows cols] = size(grid.K);
+	   mvec = zeros(rows,1);
+	   for i=1:rows
+	      for j=1:cols
+		     mvec(i) = mvec(i) + double(single(full(grid.K(i,j))) * single(u(j))) ;
+		  end
+	   end
+	end
+		
     % compute the residual
     function r = residual(grid, rhs, u)
       if ( nargin < 2 )
@@ -131,7 +142,9 @@ classdef grid < handle
       end
      
 	  if grid.prec_switch==2 || grid.prec_switch==4 || grid.prec_switch==5 || grid.prec_switch==7
-	     r = double(single(grid.K*u) - single(rhs)) ;
+	     %r = double(single(grid.K*u) - single(rhs)) ;
+		  mv = grid.matvec(rhs,u);
+		  r = mv - rhs ;
 	  else
          r = grid.K*u - rhs;
 	  end
